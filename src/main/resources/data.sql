@@ -1,0 +1,9 @@
+insert into user_sa values ('1','SandeepBhupathi','sandeepbupathi08@gmail.com');
+insert into user_sa values ('2','Sandeep1','sandeepbupathi07@gmail.com');
+insert into user_sa values ('3','Sandeep3','sandeepbupathi09@gmail.com');
+insert into user_sa values ('4','Sowmya','sandeepbupathi10@gmail.com');
+insert into address_sa values ('1',30080);
+insert into address_sa values ('2',30081);
+insert into address_sa values ('3',30082);
+insert into address_sa values ('4',30084);
+insert into address_sa values ('4',30085);
