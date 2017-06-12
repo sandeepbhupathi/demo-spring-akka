@@ -5,7 +5,8 @@ import javax.inject.Named;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.example.demo.actor.SingleUseCouponActor;
+import com.example.demo.actor.SingleUseCouponChildActor;
+import com.example.demo.actor.SingleUseCouponParentActor;
 import com.example.demo.service.SingleUseCouponService;
 
 import akka.actor.ActorRef;
@@ -14,20 +15,29 @@ import akka.actor.Props;
 
 @Configuration
 public class AkkaConfig {
-	
 	@Bean
-	public ActorSystem getSystem(){
+	public ActorSystem getSystem() {
 		return ActorSystem.create("SingleUseActorSystem");
 	}
-	
-	@Bean(name="singleUseActorConfig")
-	public Props singleUseActorConfig(SingleUseCouponService singleUseActor){
-		return Props.create(SingleUseCouponActor.class,singleUseActor);
+
+	@Bean(name = "singleUseChildActorConfig")
+	public Props singleUseChildActorConfig(SingleUseCouponService singleUseActorService) {
+		return Props.create(SingleUseCouponChildActor.class, singleUseActorService);
 	}
-	
-	@Bean(name="singleUseActor")
-	public ActorRef singleUseActor(ActorSystem system,@Named("singleUseActorConfig") Props singleUseActorConfig ){
-		System.out.println("Creating actor ref bean.......");
+
+	@Bean(name = "singleUseChildActor")
+	public ActorRef singleUseChildActor(ActorSystem system, @Named("singleUseChildActorConfig") Props singleUseActorConfig) {
 		return system.actorOf(singleUseActorConfig);
 	}
+	
+	@Bean(name = "singleUseActorConfig")
+	public Props singleUseActorConfig(@Named("singleUseChildActor") ActorRef singleUseActor) {
+		return Props.create(SingleUseCouponParentActor.class,singleUseActor);
+	}
+
+	@Bean(name = "singleUseActor")
+	public ActorRef singleUseActor(ActorSystem system, @Named("singleUseActorConfig") Props singleUseActorConfig) {
+		return system.actorOf(singleUseActorConfig);
+	}
+	
 }
